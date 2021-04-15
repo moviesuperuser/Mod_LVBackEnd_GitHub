@@ -128,7 +128,7 @@ class MovieController extends Controller
         'GenreName' => $request['GenreName'],
         'Rating' => $request['Rating']
       ], [
-        'cascadeCreate' => true
+        'cascadeCreate' => false
       ])
     );
 
