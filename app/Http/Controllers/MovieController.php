@@ -9,6 +9,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Recombee\RecommApi\Client;
+use Recombee\RecommApi\Requests as Reqs;
+use Recombee\RecommApi\Exceptions as Ex;
 
 class MovieController extends Controller
 {
@@ -59,28 +62,76 @@ class MovieController extends Controller
         422
       );
     }
-    $updateComment = DB::table('Movies')
-      ->where('id', $request['id'])
-      ->update([
-        "Title" => $request['Title'],
-        "Episodes" => $request['Episodes'],
-        "IMDB" => $request['IMDB'],
-        "Description" => $request['Description'],
-        "urlCover" => $request['urlCover'],
-        "ViewCount" => $request['ViewCount'],
-        "Quality" => $request['Quality'],
-        "Length" => $request['Length'],
-        "Slug" => $request['Slug'],
-        "Year" => $request['Year'],
-        "ShowHide" => $request['ShowHide'],
-        "VideoLink" => $request['VideoLink'],
-        "Actors" => $request['Actors'],
-        "Director" => $request['Director'],
-        "created_at" => $request['created_at'],
-        "updated_at" => $request['updated_at'],
-        "GenreName" => $request['GenreName'],
-        "Rating" => $request['Rating']
-      ]);
+    $movie = Movie::find($request['id']);
+    // Movie::saveObjects([
+    //   'id' => $request['id'],
+    //   'Title' => $request['Title'],
+    //   'Episodes' => $request['Episodes'],
+    //   'IMDB' => $request['IMDB'],
+    //   'Description' => $request['Description'],
+    //   'urlCover' => $request['urlCover'],
+    //   'ViewCount' => $request['ViewCount'],
+    //   'Quality' => $request['Quality'],
+    //   'Length' => $request['Length'],
+    //   'Slug' => $request['Slug'],
+    //   'Year' => $request['Year'],
+    //   'ShowHide' => $request['ShowHide'],
+    //   'VideoLink' => $request['VideoLink'],
+    //   'Actors' => $request['Actors'],
+    //   'Director' => $request['Director'],
+    //   'created_at' => $request['created_at'],
+    //   'updated_at' => $request['updated_at'],
+    //   'GenreName' => $request['GenreName'],
+    //   'Rating' => $request['Rating']
+    // ]);
+
+    $movie->Title = $request['Title'];
+    $movie->Episodes = $request['Episodes'];
+    $movie->IMDB = $request['IMDB'];
+    $movie->Description = $request['Description'];
+    $movie->urlCover = $request['urlCover'];
+    $movie->ViewCount = $request['ViewCount'];
+    $movie->Quality = $request['Quality'];
+    $movie->Length = $request['Length'];
+    $movie->Slug = $request['Slug'];
+    $movie->Year = $request['Year'];
+    $movie->ShowHide = $request['ShowHide'];
+    $movie->VideoLink = $request['VideoLink'];
+    $movie->Actors = $request['Actors'];
+    $movie->Director = $request['Director'];
+    $movie->created_at = $request['created_at'];
+    $movie->updated_at = $request['updated_at'];
+    $movie->GenreName = $request['GenreName'];
+    $movie->Rating = $request['Rating'];
+    $movie->update();
+
+    $client = new Client("movies-dev", 'QKR26O5fSEtJnB7dxPrlpkE2rH2f093uh0ir5PlbrBphGEWYy8cl3rTIRxvqhzB1');
+    $client->send(
+      new Reqs\SetItemValues($request['id'], [
+        'id' => $request['id'],
+        'Title' => $request['Title'],
+        'Episodes' => $request['Episodes'],
+        'IMDB' => $request['IMDB'],
+        'Description' => $request['Description'],
+        'urlCover' => $request['urlCover'],
+        'ViewCount' => $request['ViewCount'],
+        'Quality' => $request['Quality'],
+        'Length' => $request['Length'],
+        'Slug' => $request['Slug'],
+        'Year' => $request['Year'],
+        'ShowHide' => $request['ShowHide'],
+        'VideoLink' => $request['VideoLink'],
+        'Actors' => $request['Actors'],
+        'Director' => $request['Director'],
+        'created_at' => $request['created_at'],
+        'updated_at' => $request['updated_at'],
+        'GenreName' => $request['GenreName'],
+        'Rating' => $request['Rating']
+      ], [
+        'cascadeCreate' => false
+      ])
+    );
+
     return $this->createJsonResult($request->all());
     return response()->json(
       [$request->all()],
