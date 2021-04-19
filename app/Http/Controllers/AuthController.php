@@ -63,10 +63,12 @@ class AuthController extends Controller
           ->update([
             'Token' => null
           ]);
-        return "Successful";
+          $result = "Successful";
+        return  $this->createJsonResult($result);
       }
       else{
-        return "Token is incorrect!";
+        $result = "Token is incorrect!";
+        return  $this->createJsonResult($result);
       }
     }
   }
@@ -90,10 +92,12 @@ class AuthController extends Controller
       ->select('id', 'password', 'Token')
       ->first();
     if ($user['password'] == null) {
-      return "Email does not exist!";
+      $result = "Email does not exist!";
+      return  $this->createJsonResult($result);
     }
     if ($user['Token'] != null) {
-      return "User is login.";
+      $result = "User is login.";
+      return  $this->createJsonResult($result);
     } else {
       if (Hash::check($request['password'], $user['password']) == true) {
         $token = Str::random(60);
@@ -108,7 +112,8 @@ class AuthController extends Controller
         );
         return $this->createJsonResult($result);
       } else {
-        return "Password is incorrect.";
+        $result = "Password is incorrect.";
+        return $this->createJsonResult($result);
       }
     }
   }
