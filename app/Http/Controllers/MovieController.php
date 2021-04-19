@@ -30,18 +30,15 @@ class MovieController extends Controller
       ->header('Access-Control-Allow-Origin', '*')
       ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   }
-  public function editMovie(Request $request)
+  public function createMovie(Request $request)
   {
     $validator = Validator::make(
       $request->all(),
       [
-        "id" => 'required|numeric',
         "Title" => 'required|string',
-        "Episodes" => 'required|numeric',
         "IMDB" => 'required|string',
         "Description" => 'required|string',
         "urlCover" => 'required|string',
-        "ViewCount" => 'required|numeric',
         "Quality" => 'required|string',
         "Length" => 'required|string',
         "Slug" => 'required|string',
@@ -50,10 +47,8 @@ class MovieController extends Controller
         "VideoLink" => 'required|string',
         "Actors" => 'required|string',
         "Director" => 'required|string',
-        "created_at" => 'required|string',
-        "updated_at" => 'required|string',
-        "GenreName" => 'required|string',
-        "Rating" => 'required|string'
+        "DateCreate" => 'required|date',
+        "GenreName" => 'required|string'
       ]
     );
     if ($validator->fails()) {
@@ -63,28 +58,6 @@ class MovieController extends Controller
       );
     }
     $movie = Movie::find($request['id']);
-    // Movie::saveObjects([
-    //   'id' => $request['id'],
-    //   'Title' => $request['Title'],
-    //   'Episodes' => $request['Episodes'],
-    //   'IMDB' => $request['IMDB'],
-    //   'Description' => $request['Description'],
-    //   'urlCover' => $request['urlCover'],
-    //   'ViewCount' => $request['ViewCount'],
-    //   'Quality' => $request['Quality'],
-    //   'Length' => $request['Length'],
-    //   'Slug' => $request['Slug'],
-    //   'Year' => $request['Year'],
-    //   'ShowHide' => $request['ShowHide'],
-    //   'VideoLink' => $request['VideoLink'],
-    //   'Actors' => $request['Actors'],
-    //   'Director' => $request['Director'],
-    //   'created_at' => $request['created_at'],
-    //   'updated_at' => $request['updated_at'],
-    //   'GenreName' => $request['GenreName'],
-    //   'Rating' => $request['Rating']
-    // ]);
-
     $movie->Title = $request['Title'];
     $movie->Episodes = $request['Episodes'];
     $movie->IMDB = $request['IMDB'];
@@ -106,37 +79,114 @@ class MovieController extends Controller
     $movie->update();
 
     $client = new Client("movies-dev", 'QKR26O5fSEtJnB7dxPrlpkE2rH2f093uh0ir5PlbrBphGEWYy8cl3rTIRxvqhzB1');
-    $client->send(
-      new Reqs\SetItemValues($request['id'], [
-        'id' => $request['id'],
-        'Title' => $request['Title'],
-        'Episodes' => $request['Episodes'],
-        'IMDB' => $request['IMDB'],
-        'Description' => $request['Description'],
-        'urlCover' => $request['urlCover'],
-        'ViewCount' => $request['ViewCount'],
-        'Quality' => $request['Quality'],
-        'Length' => $request['Length'],
-        'Slug' => $request['Slug'],
-        'Year' => $request['Year'],
-        'ShowHide' => $request['ShowHide'],
-        'VideoLink' => $request['VideoLink'],
-        'Actors' => $request['Actors'],
-        'Director' => $request['Director'],
-        'created_at' => $request['created_at'],
-        'updated_at' => $request['updated_at'],
-        'GenreName' => $request['GenreName'],
-        'Rating' => $request['Rating']
-      ], [
-        'cascadeCreate' => false
-      ])
-    );
+    $requestRecombee = new Reqs\SetItemValues($request['id'], [
+      'Title' => $request['Title'],
+      'IMDB' => $request['IMDB'],
+      'Description' => $request['Description'],
+      'urlCover' => $request['urlCover'],
+      'ViewCount' => $request['ViewCount'],
+      'Slug' => $request['Slug'],
+      'Year' => $request['Year'],
+      'Actors' => $this->StringToArray($request['Actors']),
+      'Director' => $request['Director'],
+      'updated_at' => $request['updated_at'],
+      'GenreName' => $this->StringToArray($request['GenreName']),
+      'Rating' => $request['Rating']
+    ], [
+      'cascadeCreate' => false
+    ]);
+    $requestRecombee->setTimeout(5000);
+    $client->send($requestRecombee);
 
     return $this->createJsonResult($request->all());
     return response()->json(
       [$request->all()],
       200
     );
+  }
+
+  public function editMovie(Request $request)
+  {
+    $validator = Validator::make(
+      $request->all(),
+      [
+        "id" => 'required|numeric',
+        "Title" => 'required|string',
+        "Episodes" => 'required|numeric',
+        "IMDB" => 'required|string',
+        "Description" => 'required|string',
+        "urlCover" => 'required|string',
+        "ViewCount" => 'required|numeric',
+        "Quality" => 'required|string',
+        "Length" => 'required|string',
+        "Slug" => 'required|string',
+        "Year" => 'required|numeric',
+        "ShowHide" => 'required|numeric',
+        "VideoLink" => 'required|string',
+        "Actors" => 'required|string',
+        "Director" => 'required|string',
+        "created_at" => 'required|date',
+        "updated_at" => 'required|date',
+        "GenreName" => 'required|string',
+        "Rating" => 'required|string'
+      ]
+    );
+    if ($validator->fails()) {
+      return response()->json(
+        [$validator->errors()],
+        422
+      );
+    }
+    $movie = Movie::find($request['id']);
+    $movie->Title = $request['Title'];
+    $movie->Episodes = $request['Episodes'];
+    $movie->IMDB = $request['IMDB'];
+    $movie->Description = $request['Description'];
+    $movie->urlCover = $request['urlCover'];
+    $movie->ViewCount = $request['ViewCount'];
+    $movie->Quality = $request['Quality'];
+    $movie->Length = $request['Length'];
+    $movie->Slug = $request['Slug'];
+    $movie->Year = $request['Year'];
+    $movie->ShowHide = $request['ShowHide'];
+    $movie->VideoLink = $request['VideoLink'];
+    $movie->Actors = $request['Actors'];
+    $movie->Director = $request['Director'];
+    $movie->created_at = $request['created_at'];
+    $movie->updated_at = $request['updated_at'];
+    $movie->GenreName = $request['GenreName'];
+    $movie->Rating = $request['Rating'];
+    $movie->update();
+
+    $client = new Client("movies-dev", 'QKR26O5fSEtJnB7dxPrlpkE2rH2f093uh0ir5PlbrBphGEWYy8cl3rTIRxvqhzB1');
+    $requestRecombee = new Reqs\SetItemValues($request['id'], [
+      'Title' => $request['Title'],
+      'IMDB' => $request['IMDB'],
+      'Description' => $request['Description'],
+      'urlCover' => $request['urlCover'],
+      'ViewCount' => $request['ViewCount'],
+      'Slug' => $request['Slug'],
+      'Year' => $request['Year'],
+      'Actors' => $this->StringToArray($request['Actors']),
+      'Director' => $request['Director'],
+      'updated_at' => $request['updated_at'],
+      'GenreName' => $this->StringToArray($request['GenreName']),
+      'Rating' => $request['Rating']
+    ], [
+      'cascadeCreate' => false
+    ]);
+    $requestRecombee->setTimeout(5000);
+    $client->send($requestRecombee);
+
+    return $this->createJsonResult($request->all());
+    return response()->json(
+      [$request->all()],
+      200
+    );
+  }
+  private function StringToArray($string){
+    $result = explode(",",$string);
+    return json_decode(json_encode($result), FALSE);
   }
   public function ShowMovieDetail($slug)
   {
@@ -159,11 +209,12 @@ class MovieController extends Controller
       $show_product = 20;
     }
     $skip_product_in_page = ($current_page - 1) * $show_product;
-    $movie = Movie::orderBy('created_at', 'desc')->skip($skip_product_in_page)->take($show_product)->get();
+    $movie = Movie::orderBy('id', 'asc')->skip($skip_product_in_page)->take($show_product)->get();
     $movieNum = Movie::count();
     $resultJson = array(
       'currentPage' => $current_page,
-      'movieNumber' => $show_product,
+      'movieNumber' =>count($movie),
+      'movieMaxNumber' => $show_product,
       'totalPage' => ceil($movieNum / $show_product),
       'result' => $movie
     );

@@ -27,44 +27,32 @@ Route::group(
     Route::post('editMovie', 'MovieController@editMovie')->name('editMovie');
   }
 );
-//C
-Route::get('/', function () {
+Route::group(
+  [
+    'middleware' => 'api',
+    'namespace'  => 'App\Http\Controllers',
+    'prefix'     => 'genre',
+  ],
+  function ($router) {
+    // Route::get('ShowMovieDetail/{slug}', 'MovieController@ShowMovieDetail')->name('ShowMovieDetail');
+    Route::get('showGenre', 'GenreController@showGenre')->name('showGenre');
+    Route::post('editGenre', 'GenreController@editGenre')->name('editGenre');
+    Route::get('deleteGenre', 'GenreController@deleteGenre')->name('deleteGenre');
+    Route::post('createGenre', 'GenreController@createGenre')->name('createGenre');
+  }
+);
+Route::group(
+  [
+    'middleware' => 'api',
+    'namespace'  => 'App\Http\Controllers',
+    'prefix'     => 'collection',
+  ],
+  function ($router) {
+    // Route::get('ShowMovieDetail/{slug}', 'MovieController@ShowMovieDetail')->name('ShowMovieDetail');
+    Route::get('showCollection', 'CollectionController@showCollection')->name('showCollection');
+    Route::post('editCollection', 'CollectionController@editCollection')->name('editCollection');
+    Route::get('deleteCollection', 'CollectionController@deleteCollection')->name('deleteCollection');
+    Route::post('createCollection', 'CollectionController@createCollection')->name('createCollection');
     
-  // $files = Storage::disk("google")->allFiles();
-  // $firstFileName= $files[0];
-  // $link = 'https://drive.google.com/uc?export=view&id='.$firstFileName;
-  // echo '<img src='.$link .' alt="Girl in a jacket" width="500" height="600">';
-  // dump("Filename : ". $firstFileName);
-  // $details = Storage::disk('google')->getMetaData($firstFileName);
-  // dump($details);
-  // $url = Storage::disk('google')->Url($firstFileName);
-  // dump('Download url : '. $url);
-  // Storage::disk('google')->setVisibility($firstFileName,'public');
-  // $visibility = Storage::disk('google')->getVisibility($firstFileName);
-  // dump('Visibility : '. $visibility);
-  // $response = Storage::disk('google')->download($firstFileName,'black.jpg');
-  // $response->send();
-  return view('welcome');
-});
-
-Route::post('/upload', function (Request $request) {
-    dd($request->file("thing"));
-  // $filename = $request->file("thing")->store("1pc05ZmozeUN-ofSgO8ugg9wG7cQU2BL1","google") ;
-  // dump($filename);
-  // $googleDriveStorage = Storage::disk('google');
-  // $dir = '/';
-  // $recursive = true; // Get subdirectories also?
-  // $file = collect(Storage::disk('google')->listContents($dir, $recursive))
-  //     ->where('type', '=', 'file')
-  //     ->where('filename', '=', pathinfo($filename, PATHINFO_FILENAME))
-  //     ->where('extension', '=', pathinfo($filename, PATHINFO_EXTENSION))
-  //     ->sortBy('timestamp')
-  //     ->last();
-  // dump($file);
-  // dump(Storage::Disk('google')->url($file['path']));
-  // $link = Storage::Disk('google')->url($file['path']);
-  // #echo '<img src='.$link .' alt="Girl in a jacket">';
-  // echo '<video>  <source src='. $link .' type="video/mp4"> </video>';
-
-});
-
+  }
+);
