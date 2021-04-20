@@ -108,7 +108,7 @@ class AuthController extends Controller
           ]);
         $result = array(
           'email' => $request['email'],
-          'name'=>$request['name'],
+          'name'=>$user['name'],
           'token' => $token
         );
         return $this->createJsonResult($result);
