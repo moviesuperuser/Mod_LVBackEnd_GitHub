@@ -101,7 +101,7 @@ class AuthController extends Controller
     } else {
       if (Hash::check($request['password'], $user['password']) == true) {
         $token = Str::random(60);
-        $user =  (array)DB::table('Moderators')
+        $userUpdate =  (array)DB::table('Moderators')
           ->where('email', $request['email'])
           ->update([
             'Token' => $token
