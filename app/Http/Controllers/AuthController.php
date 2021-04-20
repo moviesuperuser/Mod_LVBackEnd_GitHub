@@ -63,10 +63,9 @@ class AuthController extends Controller
           ->update([
             'Token' => null
           ]);
-          $result = "Successful";
+        $result = "Successful";
         return  $this->createJsonResult($result);
-      }
-      else{
+      } else {
         $result = "Token is incorrect!";
         return  $this->createJsonResult($result);
       }
@@ -89,34 +88,30 @@ class AuthController extends Controller
     }
     $user =  (array)DB::table('Moderators')
       ->where('email', $request['email'])
-      ->select('id','name','urlAvatar', 'password', 'Token')
+      ->select('id', 'name', 'urlAvatar', 'password', 'Token')
       ->first();
     if ($user['password'] == null) {
       $result = "Email does not exist!";
       return  $this->createJsonResult($result);
     }
-    if ($user['Token'] != null) {
-      $result = "User is login.";
-      return  $this->createJsonResult($result);
+
+    if (Hash::check($request['password'], $user['password']) == true) {
+      $token = Str::random(60);
+      $userUpdate =  (array)DB::table('Moderators')
+        ->where('email', $request['email'])
+        ->update([
+          'Token' => $token
+        ]);
+      $result = array(
+        'email' => $request['email'],
+        'name' => $user['name'],
+        'urlAvatar' => $user['urlAvatar'],
+        'token' => $token
+      );
+      return $this->createJsonResult($result);
     } else {
-      if (Hash::check($request['password'], $user['password']) == true) {
-        $token = Str::random(60);
-        $userUpdate =  (array)DB::table('Moderators')
-          ->where('email', $request['email'])
-          ->update([
-            'Token' => $token
-          ]);
-        $result = array(
-          'email' => $request['email'],
-          'name'=>$user['name'],
-          'urlAvatar'=>$user['urlAvatar'],
-          'token' => $token
-        );
-        return $this->createJsonResult($result);
-      } else {
-        $result = "Password is incorrect.";
-        return $this->createJsonResult($result);
-      }
+      $result = "Password is incorrect.";
+      return $this->createJsonResult($result);
     }
   }
 
