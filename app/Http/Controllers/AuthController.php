@@ -91,6 +91,7 @@ class AuthController extends Controller
       ->where('email', $request['email'])
       ->select('id','name', 'password', 'Token')
       ->first();
+    return $user;
     if ($user['password'] == null) {
       $result = "Email does not exist!";
       return  $this->createJsonResult($result);
