@@ -89,7 +89,7 @@ class AuthController extends Controller
     }
     $user =  (array)DB::table('Moderators')
       ->where('email', $request['email'])
-      ->select('id','name', 'password', 'Token')
+      ->select('id','name','urlAvatar', 'password', 'Token')
       ->first();
     if ($user['password'] == null) {
       $result = "Email does not exist!";
@@ -109,6 +109,7 @@ class AuthController extends Controller
         $result = array(
           'email' => $request['email'],
           'name'=>$user['name'],
+          'urlAvatar'=>$user['urlAvatar'],
           'token' => $token
         );
         return $this->createJsonResult($result);
