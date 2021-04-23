@@ -210,7 +210,8 @@ class MovieController extends Controller
     }
     $skip_product_in_page = ($current_page - 1) * $show_product;
     $movie = Movie::orderBy('id', 'asc')->where('Title','like','%'.$request['Title'].'%')->skip($skip_product_in_page)->take($show_product)->get();
-    $movieNum = count($movie);
+    $movieTotal= Movie::where('Title','like','%'.$request['Title'].'%')->get();
+    $movieNum = count($movieTotal);
     $resultJson = array(
       'currentPage' => $current_page,
       'movieNumber' =>count($movie),
