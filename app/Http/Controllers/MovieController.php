@@ -209,7 +209,7 @@ class MovieController extends Controller
       $show_product = 20;
     }
     $skip_product_in_page = ($current_page - 1) * $show_product;
-    $movie = Movie::orderBy('id', 'asc')->where('Slug','like','%'.$request['Slug'].'%')->skip($skip_product_in_page)->take($show_product)->get();
+    $movie = Movie::orderBy('id', 'asc')->where('Title','like','%'.$request['Slug'].'%')->skip($skip_product_in_page)->take($show_product)->get();
     $movieNum = Movie::count();
     $resultJson = array(
       'currentPage' => $current_page,
