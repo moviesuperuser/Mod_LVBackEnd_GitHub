@@ -74,7 +74,7 @@ class GenreController extends Controller
     }
     $skip_product_in_page = ($current_page - 1) * $show_product;
     $genre = Genre::orderBy('id', 'asc')->where('Slug','like','%'.$request['Slug'].'%')->skip($skip_product_in_page)->take($show_product)->get();
-    $genreNum = Genre::count();
+    $genreNum = count($genre);
     $resultJson = array(
       'currentPage' => $current_page,
       'genreNumber' => count($genre),

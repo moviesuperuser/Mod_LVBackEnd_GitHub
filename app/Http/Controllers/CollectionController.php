@@ -52,7 +52,7 @@ class CollectionController extends Controller
     }
     $skip_product_in_page = ($current_page - 1) * $show_product;
     $collection = Collection::orderBy('id', 'asc')->skip($skip_product_in_page)->take($show_product)->get();
-    $collectionNum = Collection::count();
+    $collectionNum = count($collection);
     $resultJson = array(
       'currentPage' => $current_page,
       'genreNumber' => count($collection),
