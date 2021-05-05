@@ -78,7 +78,7 @@ class MovieController extends Controller
     $movie->Rating = $request['Rating'];
     $movie->update();
 
-    $client = new Client("movies-dev", 'JPhrE3mFxojlFRbEaxzQNQFubp9h73V8h3JtRokprr5Kd3b7uE8O54ZpZOwHB0oT');
+    $client = new Client("movies1-dev", 'STcW4eS49qmjx4HBE7bJfklV7uDqNdKMoTBlP1rsGEf3kDPUSjCVC5AQlAn6QSle');
     $requestRecombee = new Reqs\SetItemValues($request['id'], [
       'Title' => $request['Title'],
       'IMDB' => $request['IMDB'],
@@ -158,7 +158,7 @@ class MovieController extends Controller
     $movie->Rating = $request['Rating'];
     $movie->update();
 
-    $client = new Client("movies-dev", 'JPhrE3mFxojlFRbEaxzQNQFubp9h73V8h3JtRokprr5Kd3b7uE8O54ZpZOwHB0oT');
+    $client = new Client("movies1-dev", 'STcW4eS49qmjx4HBE7bJfklV7uDqNdKMoTBlP1rsGEf3kDPUSjCVC5AQlAn6QSle');
     $requestRecombee = new Reqs\SetItemValues($request['id'], [
       'Title' => $request['Title'],
       'IMDB' => $request['IMDB'],
