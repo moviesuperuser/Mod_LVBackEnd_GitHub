@@ -93,7 +93,7 @@ class MovieController extends Controller
       'GenreName' => $this->StringToArray($request['GenreName']),
       'Rating' => $request['Rating']
     ], [
-      'cascadeCreate' => false
+      'cascadeCreate' => true
     ]);
     $requestRecombee->setTimeout(5000);
     $client->send($requestRecombee);
