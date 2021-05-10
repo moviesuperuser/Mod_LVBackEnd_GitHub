@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\User;
+use App\Models\Moderators;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use PhpParser\Node\Expr\AssignOp\Mod;
 
 class AuthController extends Controller
 {
@@ -69,6 +70,27 @@ class AuthController extends Controller
         $result = "Token is incorrect!";
         return  $this->createJsonResult($result);
       }
+    }
+  }
+  public function delete(Request $request)
+  {
+    $validator = Validator::make(
+      $request->all(),
+      [
+        "CollectionId" => 'required|numeric',
+        "confirm" => 'required|boolean'
+      ]
+    );
+    if ($validator->fails()) {
+      return response()->json(
+        [$validator->errors()],
+        422
+      );
+    }
+    if ($request['confirm']) {
+      $Collection = Moderators::find($request['CollectionId']);
+      $Collection->delete();
+      return "successful";
     }
   }
   public function login(Request $request)
