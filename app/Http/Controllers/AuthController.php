@@ -120,8 +120,7 @@ class AuthController extends Controller
         // 'gender' =>  $request['gender'],
         'urlAvatar' => $Mod['urlAvatar'],
         'created_at' => $Mod['created_at'],
-        'updated_at' => $Mod['updated_at
-        ']
+        'updated_at' => $Mod['updated_at']
       ]);
       $Mod->delete();
       
