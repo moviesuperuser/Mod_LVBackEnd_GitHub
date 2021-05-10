@@ -128,8 +128,7 @@ class AuthController extends Controller
         'SocialMedia' => 'sometimes|string|nullable',
         // 'gender' => 'required|string',
         'urlAvatar' => 'sometimes|string|nullable',
-        'created_at' => 'required|date',
-        'updated_at' => 'required|date'
+        'DateCreate' => 'required|date'
 
       ]
     );
@@ -157,8 +156,8 @@ class AuthController extends Controller
         'SocialMedia' =>  $request['SocialMedia'],
         // 'gender' =>  $request['gender'],
         'urlAvatar' => $request['urlAvatar'],
-        'created_at' => $request['created_at'],
-        'updated_at' => $request['updated_at']
+        'created_at' => $request['DateCreate'],
+        'updated_at' => $request['DateCreate']
       ]);
     return $this->createJsonResult($createUser);
   }
