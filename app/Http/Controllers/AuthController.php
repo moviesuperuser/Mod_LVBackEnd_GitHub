@@ -77,7 +77,7 @@ class AuthController extends Controller
     $validator = Validator::make(
       $request->all(),
       [
-        "CollectionId" => 'required|numeric',
+        "id" => 'required|numeric',
         "confirm" => 'required|boolean'
       ]
     );
@@ -88,7 +88,7 @@ class AuthController extends Controller
       );
     }
     if ($request['confirm']) {
-      $Collection = Moderators::find($request['CollectionId']);
+      $Collection = Moderators::find($request['id']);
       $Collection->delete();
       return "successful";
     }
