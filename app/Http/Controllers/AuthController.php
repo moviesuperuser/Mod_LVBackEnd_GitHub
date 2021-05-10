@@ -123,7 +123,7 @@ class AuthController extends Controller
       [
         'username'     => 'required|string|between:2,100',
         'name'     => 'required|string|between:2,100',
-        'email'    => 'required|email|unique:users',
+        'email'    => 'required|string',
         'password' => 'required|string|min:6',
         'SocialMedia' => 'sometimes|string|nullable',
         // 'gender' => 'required|string',
