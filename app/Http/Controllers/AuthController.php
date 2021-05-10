@@ -88,9 +88,44 @@ class AuthController extends Controller
       );
     }
     if ($request['confirm']) {
-      $Collection = Moderators::find($request['id']);
-      $Collection->delete();
+      $Mod = Moderators::find($request['id']);
+      $Mod->delete();
       return "successful";
+    }
+  }
+  public function upgrade(Request $request)
+  {
+    $validator = Validator::make(
+      $request->all(),
+      [
+        "id" => 'required|numeric',
+        "confirm" => 'required|boolean'
+      ]
+    );
+    if ($validator->fails()) {
+      return response()->json(
+        [$validator->errors()],
+        422
+      );
+    }
+    if ($request['confirm']) {
+      $Mod = Moderators::find($request['id']);
+      $createAdmin = DB::table('Admins')
+      ->insert([
+        'username' => $Mod['username'],
+        'name' => $Mod['name'],
+        'email' => $Mod['email'],
+        'password' => $Mod['password'],
+        'SocialMedia' =>  $Mod['SocialMedia'],
+        // 'gender' =>  $request['gender'],
+        'urlAvatar' => $Mod['urlAvatar'],
+        'created_at' => $Mod['created_at'],
+        'updated_at' => $Mod['updated_at
+        ']
+      ]);
+      $Mod->delete();
+      
+      return $Mod;
     }
   }
   public function login(Request $request)

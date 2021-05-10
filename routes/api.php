@@ -25,6 +25,7 @@ Route::group(
     Route::post('register', 'AuthController@register')->name('register');
     Route::post('logout', 'AuthController@logout')->name('logout');
     Route::get('delete', 'AuthController@delete')->name('delete');
+    Route::get('upgrade', 'AuthController@upgrade')->name('upgrade');
   }
 );
 Route::group(
