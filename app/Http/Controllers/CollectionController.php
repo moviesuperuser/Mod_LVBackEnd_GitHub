@@ -92,6 +92,7 @@ class CollectionController extends Controller
         "CollectionName" => 'required|string',
         "Description" => 'sometimes|string|max:255|nullable',
         "Priority" => 'sometimes|numeric|nullable',
+        "urlAvatar" => 'sometimes|string|nullable',
         "ShowHide" => 'required|numeric',
         "DateCreate" => 'required|date',
         "Slug" => 'required|string',
@@ -108,6 +109,7 @@ class CollectionController extends Controller
     $Collection->Description = $request['Description'];
     $Collection->ShowHide = $request['ShowHide'];
     $Collection->Priority = $request['Priority'];
+    $Collection->urlAvatar = $request['urlAvatar'];
     $Collection->Slug = $request['Slug'];
     $Collection->created_at = $request['DateCreate'];
     $Collection->updated_at = $request['DateCreate'];
@@ -125,6 +127,7 @@ class CollectionController extends Controller
         "Priority" => 'sometimes|numeric|nullable',
         "ShowHide" => 'required|numeric',
         "created_at" => 'required|date',
+        "urlAvatar" => 'sometimes|string|nullable',
         "updated_at" => 'required|date',
         "Slug" => 'required|string',
       ]
@@ -141,6 +144,7 @@ class CollectionController extends Controller
     $Collection->Description = $request['Description'];
     $Collection->ShowHide = $request['ShowHide'];
     $Collection->Priority = $request['Priority'];
+    $Collection->urlAvatar = $request['urlAvatar'];
     $Collection->Slug = $request['Slug'];
     $Collection->created_at = $request['created_at'];
     $Collection->updated_at = $request['updated_at'];
