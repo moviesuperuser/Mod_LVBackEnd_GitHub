@@ -51,7 +51,7 @@ class CollectionController extends Controller
       $show_product = 7;
     }
     $skip_product_in_page = ($current_page - 1) * $show_product;
-    $collection = Collection::orderBy('id', 'asc')->where('CollectionName','like','%'.$request['Title'].'%')->skip($skip_product_in_page)->take($show_product)->get();
+    $collection = Collection::orderBy('id', 'desc')->where('CollectionName','like','%'.$request['Title'].'%')->skip($skip_product_in_page)->take($show_product)->get();
     $collectionTotal= Collection::where('CollectionName','like','%'.$request['Title'].'%')->get();
     $collectionNum = count($collectionTotal);
     $resultJson = array(

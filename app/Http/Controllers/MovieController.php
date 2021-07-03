@@ -78,7 +78,7 @@ class MovieController extends Controller
     $movie->Rating = $request['Rating'];
     $movie->update();
 
-    $client = new Client("movies1-dev", 'STcW4eS49qmjx4HBE7bJfklV7uDqNdKMoTBlP1rsGEf3kDPUSjCVC5AQlAn6QSle');
+    $client = new Client("movies202-dev", 'JPhrE3mFxojlFRbEaxzQNQFubp9h73V8h3JtRokprr5Kd3b7uE8O54ZpZOwHB0oT');
     $requestRecombee = new Reqs\SetItemValues($request['id'], [
       'Title' => $request['Title'],
       'IMDB' => $request['IMDB'],
@@ -158,7 +158,7 @@ class MovieController extends Controller
     $movie->Rating = $request['Rating'];
     $movie->update();
 
-    $client = new Client("movies1-dev", 'STcW4eS49qmjx4HBE7bJfklV7uDqNdKMoTBlP1rsGEf3kDPUSjCVC5AQlAn6QSle');
+    $client = new Client("movies202-dev", 'JPhrE3mFxojlFRbEaxzQNQFubp9h73V8h3JtRokprr5Kd3b7uE8O54ZpZOwHB0oT');
     $requestRecombee = new Reqs\SetItemValues($request['id'], [
       'Title' => $request['Title'],
       'IMDB' => $request['IMDB'],
@@ -209,7 +209,7 @@ class MovieController extends Controller
       $show_product = 20;
     }
     $skip_product_in_page = ($current_page - 1) * $show_product;
-    $movie = Movie::orderBy('id', 'asc')->where('Title','like','%'.$request['Title'].'%')->skip($skip_product_in_page)->take($show_product)->get();
+    $movie = Movie::orderBy('id', 'desc')->where('Title','like','%'.$request['Title'].'%')->skip($skip_product_in_page)->take($show_product)->get();
     $movieTotal= Movie::where('Title','like','%'.$request['Title'].'%')->get();
     $movieNum = count($movieTotal);
     $resultJson = array(
