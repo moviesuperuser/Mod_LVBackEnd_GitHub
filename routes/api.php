@@ -38,6 +38,7 @@ Route::group(
     Route::get('ShowMovieDetail/{slug}', 'MovieController@ShowMovieDetail')->name('ShowMovieDetail');
     Route::get('showMovie', 'MovieController@showMovie')->name('showMovie');
     Route::post('editMovie', 'MovieController@editMovie')->name('editMovie');
+    Route::post('hideOldMovie', 'MovieController@hideOldMovie')->name('hideOldMovie');
   }
 );
 Route::group(

@@ -105,6 +105,29 @@ class MovieController extends Controller
     );
   }
 
+  public function hideOldMovie(Request $request)
+  {
+    $movieId = $request['movieId'];
+    $movie = Movie::find($movieId);
+    $movie->ShowHide = 0;
+    $movie->update();
+
+    $client = new Client("movies202-dev", 'JPhrE3mFxojlFRbEaxzQNQFubp9h73V8h3JtRokprr5Kd3b7uE8O54ZpZOwHB0oT');
+    $requestRecombee = new Reqs\SetItemValues($movieId, [
+      'ShowHide' => false
+    ], [
+      'cascadeCreate' => false
+    ]);
+    $requestRecombee->setTimeout(5000);
+    $client->send($requestRecombee);
+
+    return $this->createJsonResult($request->all());
+    return response()->json(
+      [$request->all()],
+      200
+    );
+  }
+
   public function editMovie(Request $request)
   {
     $validator = Validator::make(
